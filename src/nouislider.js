@@ -1,3 +1,4 @@
+/*! nouislider - 14.0.2 - 6/28/2019 */
 (function(factory) {
     if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module.
@@ -12,7 +13,8 @@
 })(function() {
     "use strict";
 
-    var VERSION = "%%REPLACE_THIS_WITH_VERSION%%";
+    var VERSION = "14.0.2";
+    var isMinMaxEqual = false;
 
     //region Helper Methods
 
@@ -518,6 +520,7 @@
     }
 
     function testRange(parsed, entry) {
+        isMinMaxEqual = false;
         // Filter incorrect input.
         if (typeof entry !== "object" || Array.isArray(entry)) {
             throw new Error("noUiSlider (" + VERSION + "): 'range' is not an object.");
@@ -530,7 +533,8 @@
 
         // Catch equal start or end.
         if (entry.min === entry.max) {
-            throw new Error("noUiSlider (" + VERSION + "): 'range' 'min' and 'max' cannot be equal.");
+            isMinMaxEqual = true;
+            // throw new Error("noUiSlider (" + VERSION + "): 'range' 'min' and 'max' cannot be equal.");
         }
 
         parsed.spectrum = new Spectrum(entry, parsed.snap, parsed.singleStep);
@@ -1038,6 +1042,11 @@
                 addClass(handle, options.cssClasses.handleLower);
             } else if (handleNumber === options.handles - 1) {
                 addClass(handle, options.cssClasses.handleUpper);
+            }
+
+            if (isMinMaxEqual) {
+                handle.setAttribute("style", "left: -5px;");
+                handle.parentElement.setAttribute("style", "right: initial;");
             }
 
             return origin;
