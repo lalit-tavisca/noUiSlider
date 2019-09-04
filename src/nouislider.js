@@ -876,7 +876,7 @@
             documentElement: { r: false, t: testDocumentElement },
             cssPrefix: { r: true, t: testCssPrefix },
             cssClasses: { r: true, t: testCssClasses },
-            ariaLabel: { r: false, t: testAriaLabel}
+            ariaLabel: { r: false, t: testAriaLabel }
         };
 
         var defaults = {
