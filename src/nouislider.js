@@ -519,6 +519,10 @@
         parsed.singleStep = entry;
     }
 
+    function testAriaLabel(parsed, entry) {
+        parsed.ariaLabel = entry;
+    }
+
     function testRange(parsed, entry) {
         isMinMaxEqual = false;
         // Filter incorrect input.
@@ -871,7 +875,8 @@
             keyboardSupport: { r: true, t: testKeyboardSupport },
             documentElement: { r: false, t: testDocumentElement },
             cssPrefix: { r: true, t: testCssPrefix },
-            cssClasses: { r: true, t: testCssClasses }
+            cssClasses: { r: true, t: testCssClasses },
+            ariaLabel: { r: false, t: testAriaLabel}
         };
 
         var defaults = {
@@ -1176,6 +1181,9 @@
                     handle.children[0].setAttribute("aria-valuemax", max);
                     handle.children[0].setAttribute("aria-valuenow", now);
                     handle.children[0].setAttribute("aria-valuetext", text);
+                    if (options.ariaLabel && options.ariaLabel.length) {
+                        handle.children[0].setAttribute("title", options.ariaLabel[index]);
+                    }
                 });
             });
         }
