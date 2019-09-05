@@ -955,8 +955,9 @@
         var d = document.createElement("div");
         var msPrefix = d.style.msTransform !== undefined;
         var noPrefix = d.style.transform !== undefined;
-
-        parsed.transformRule = noPrefix ? "transform" : msPrefix ? "msTransform" : "webkitTransform";
+        if (options.range.min !== options.range.max) {
+            parsed.transformRule = noPrefix ? "transform" : msPrefix ? "msTransform" : "webkitTransform";
+        }
 
         // Pips don't move, so we can place them using left/top.
         var styles = [["left", "top"], ["right", "bottom"]];
@@ -2167,8 +2168,11 @@
             var connectWidth = h - l;
             var translateRule = "translate(" + inRuleOrder(transformDirection(l, connectWidth) + "%", "0") + ")";
             var scaleRule = "scale(" + inRuleOrder(connectWidth / 100, "1") + ")";
-
-            scope_Connects[index].style[options.transformRule] = translateRule + " " + scaleRule;
+            if (isMinMaxEqual) {
+                scope_Connects[index].setAttribute("style", "background: #fff !important");
+            } else {
+                scope_Connects[index].style[options.transformRule] = translateRule + " " + scaleRule;
+            }
         }
 
         // Parses value passed to .set method. Returns current value if not parse-able.
