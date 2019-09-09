@@ -953,9 +953,10 @@
         var d = document.createElement("div");
         var msPrefix = d.style.msTransform !== undefined;
         var noPrefix = d.style.transform !== undefined;
+
+        parsed.transformRule = noPrefix ? "transform" : msPrefix ? "msTransform" : "webkitTransform";
         if (options.range.min !== options.range.max) {
             isMinMaxEqual = false;
-            parsed.transformRule = noPrefix ? "transform" : msPrefix ? "msTransform" : "webkitTransform";
         } else {
             isMinMaxEqual = true;
         }
