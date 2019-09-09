@@ -524,7 +524,6 @@
     }
 
     function testRange(parsed, entry) {
-        isMinMaxEqual = false;
         // Filter incorrect input.
         if (typeof entry !== "object" || Array.isArray(entry)) {
             throw new Error("noUiSlider (" + VERSION + "): 'range' is not an object.");
@@ -537,7 +536,6 @@
 
         // Catch equal start or end.
         if (entry.min === entry.max) {
-            isMinMaxEqual = true;
             // throw new Error("noUiSlider (" + VERSION + "): 'range' 'min' and 'max' cannot be equal.");
         }
 
@@ -956,7 +954,10 @@
         var msPrefix = d.style.msTransform !== undefined;
         var noPrefix = d.style.transform !== undefined;
         if (options.range.min !== options.range.max) {
+            isMinMaxEqual = false;
             parsed.transformRule = noPrefix ? "transform" : msPrefix ? "msTransform" : "webkitTransform";
+        } else {
+            isMinMaxEqual = true;
         }
 
         // Pips don't move, so we can place them using left/top.
@@ -1048,11 +1049,6 @@
                 addClass(handle, options.cssClasses.handleLower);
             } else if (handleNumber === options.handles - 1) {
                 addClass(handle, options.cssClasses.handleUpper);
-            }
-
-            if (isMinMaxEqual) {
-                handle.setAttribute("style", "left: -5px;");
-                handle.parentElement.setAttribute("style", "right: initial;");
             }
 
             return origin;
@@ -2020,6 +2016,11 @@
             // Limit percentage to the 0 - 100 range
             to = limit(to);
 
+            // Added to keep the handles on left side when min and max are equal and only two handles
+            if (isMinMaxEqual && scope_Handles.length === 2) {
+                to = 0;
+            }
+
             // Return false if handle can't move
             if (to === reference[handleNumber] && !getValue) {
                 return false;
@@ -2168,11 +2169,7 @@
             var connectWidth = h - l;
             var translateRule = "translate(" + inRuleOrder(transformDirection(l, connectWidth) + "%", "0") + ")";
             var scaleRule = "scale(" + inRuleOrder(connectWidth / 100, "1") + ")";
-            if (isMinMaxEqual) {
-                scope_Connects[index].setAttribute("style", "background: #fff !important");
-            } else {
-                scope_Connects[index].style[options.transformRule] = translateRule + " " + scaleRule;
-            }
+            scope_Connects[index].style[options.transformRule] = translateRule + " " + scaleRule;
         }
 
         // Parses value passed to .set method. Returns current value if not parse-able.
