@@ -14,7 +14,6 @@
     "use strict";
 
     var VERSION = "14.0.2";
-    var isMinMaxEqual = false;
 
     //region Helper Methods
 
@@ -849,7 +848,8 @@
             animate: true,
             animationDuration: 300,
             ariaFormat: defaultFormatter,
-            format: defaultFormatter
+            format: defaultFormatter,
+            isMinMaxEqual: options.range.min === options.range.max
         };
 
         // Tests are executed in the order they are presented here.
@@ -955,11 +955,6 @@
         var noPrefix = d.style.transform !== undefined;
 
         parsed.transformRule = noPrefix ? "transform" : msPrefix ? "msTransform" : "webkitTransform";
-        if (options.range.min !== options.range.max) {
-            isMinMaxEqual = false;
-        } else {
-            isMinMaxEqual = true;
-        }
 
         // Pips don't move, so we can place them using left/top.
         var styles = [["left", "top"], ["right", "bottom"]];
@@ -2018,7 +2013,7 @@
             to = limit(to);
 
             // Added to keep the handles on left side when min and max are equal and only two handles
-            if (isMinMaxEqual && scope_Handles.length === 2) {
+            if (options.isMinMaxEqual && scope_Handles.length === 2) {
                 to = 0;
             }
 
